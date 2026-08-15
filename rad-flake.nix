@@ -32,16 +32,14 @@
 #   _assert = condition: message: if !condition then throw message else null;
 # in
 {
+  config,
   inputs,
-  systems ? null,
-  nixpkgsConfig ? { },
-  useLib ? null,
+  lib,
+  ...
 }:
 let
-  makePkgs = np: system: import np ({ inherit system; } // nixpkgsConfig);
-in
-f:
-let
+  makePkgs = np: system: import np ({ inherit system; } // config.rad-flake.nixpkgsConfig);
+
   altPins =
     let
       inherit (builtins)
@@ -55,33 +53,28 @@ let
     |> attrNames
     |> filter (n: substring 0 (stringLength "nixpkgs-") n == "nixpkgs-")
     |> map (n: substring (stringLength "nixpkgs-") (stringLength n) n);
-
-  # # TODO: given nix is functional, is this guaranteed to be evaluated, or do we need to use a more elaborate assert construct that can return the rest as an expression?
-  # _ = _assert (inputs ? nixpkgs || altPins != [ ]) "no \"nixpkgs\" or \"nixpkgs-\"-prefixed inputs";
-
-  lib =
-    if useLib != null then
-      inputs.${useLib}.lib
-    else if inputs ? nixpkgs then
-      inputs.nixpkgs.lib
-    else
-      inputs.${"nixpkgs-${builtins.head altPins}"}.lib;
-
-  mergeSets = builtins.foldl' lib.recursiveUpdate { };
-
-  _systems = if systems != null then systems else lib.systems.flakeExposed;
 in
-assert inputs ? nixpkgs || altPins != [ ] || throw "no \"nixpkgs\" or \"nixpkgs-\"-prefixed inputs";
-_systems
-|> map (
-  system:
-  let
-    pkgsArg = lib.optionalAttrs (inputs ? nixpkgs) { pkgs = makePkgs inputs.nixpkgs system; };
-    pkgsArgs = lib.genAttrs' altPins (pin: {
-      name = "pkgs-${pin}";
-      value = makePkgs inputs.${"nixpkgs-${pin}"} system;
-    });
-  in
-  f (inputs // pkgsArg // pkgsArgs // { inherit system; })
-)
-|> mergeSets
+{
+  options.rad-flake.nixpkgsConfig = lib.mkOption {
+    type = lib.types.attrs;
+    default = { };
+    description = "Extra arguments (e.g., excluding system) to pass to `import nixpkgs`.";
+  };
+
+  config.perSystem =
+    { system, ... }:
+    let
+      pinArgs = lib.genAttrs' altPins (pin: {
+        name = "pkgs-${pin}";
+        value = makePkgs inputs.${"nixpkgs-${pin}"} system;
+      });
+
+      pkgsOverride = lib.optionalAttrs (!(inputs ? nixpkgs)) {
+        pkgs = lib.mkDefault (makePkgs inputs.${"nixpkgs-${builtins.head altPins}"} system);
+      };
+    in
+    assert inputs ? nixpkgs || altPins != [ ] || throw "no \"nixpkgs\" or \"nixpkgs-\"-prefixed inputs";
+    {
+      _module.args = pinArgs // pkgsOverride;
+    };
+}
