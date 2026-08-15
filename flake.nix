@@ -6,7 +6,7 @@
     flakeModule = self.flakeModules.default;
 
     templates.default.path = ./template;
-    tempaltes.default.description = ''
+    templates.default.description = ''
       Barebones flake-parts boilerplate, with the rad-flake module.
     '';
   };
