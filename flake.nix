@@ -5,6 +5,6 @@
     flakeModules.default = ./rad-flake.nix;
     flakeModule = self.flakeModules.default;
 
-    templates.default.template = ./template;
+    templates.default.path = ./template;
   };
 }
