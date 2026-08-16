@@ -10,6 +10,9 @@
       Barebones flake-parts boilerplate, with the rad-flake module.
     '';
 
-    # templates.shell.path = ./templates/
+    templates.shell.path = ./templates/shell;
+    templates.shell.description = ''
+      Hop straight into a basic devShell.
+    '';
   };
 }
