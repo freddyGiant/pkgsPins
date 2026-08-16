@@ -26,6 +26,8 @@
               #
             '';
           };
+
+          formatter = pkgs.nixfmt-tree;
         };
     };
 }

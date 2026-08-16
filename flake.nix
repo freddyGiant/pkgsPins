@@ -12,6 +12,8 @@
       ...
     }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ ./rad-flake.nix ];
+
       flake = {
         flakeModules.default = ./rad-flake.nix;
         flakeModule = self.flakeModules.default;

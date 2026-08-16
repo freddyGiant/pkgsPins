@@ -14,6 +14,8 @@
       imports = [ rad-flake.flakeModules.default ];
 
       systems = nixpkgs.lib.systems.flakeExposed;
-      perSystem = { pkgs, ... }: { };
+      perSystem = { pkgs, ... }: {
+        formatter = pkgs.nixfmt-tree;
+      };
     };
 }
