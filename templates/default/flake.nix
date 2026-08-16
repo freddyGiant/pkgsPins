@@ -4,7 +4,12 @@
   inputs.rad-flake.url = "github:freddyGiant/rad-flake";
 
   outputs =
-    { nixpkgs, flake-parts, rad-flake, ... }@inputs:
+    {
+      nixpkgs,
+      flake-parts,
+      rad-flake,
+      ...
+    }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ rad-flake.flakeModules.default ];
 
