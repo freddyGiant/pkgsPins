@@ -4,10 +4,11 @@
   inputs.rad-flake.url = "freddyGiant/rad-flake";
 
   outputs =
-    { flake-parts, rad-flake }@inputs:
+    { nixpkgs, flake-parts, rad-flake }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ rad-flake.flakeModules.default ];
 
+      systems = nixpkgs.lib.systems.flakeExposed;
       perSystem = { pkgs, ... }: { };
     };
 }
