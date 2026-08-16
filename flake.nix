@@ -4,7 +4,13 @@
   inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
 
-  outputs = { self, flake-parts, nixpkgs, ... }@inputs:
+  outputs =
+    {
+      self,
+      flake-parts,
+      nixpkgs,
+      ...
+    }@inputs:
     flake-parts.lib.mkFlake { inherit inputs; } {
       flake = {
         flakeModules.default = ./rad-flake.nix;
