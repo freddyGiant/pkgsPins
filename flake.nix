@@ -1,18 +1,27 @@
 {
   description = "flake-parts module that deals with extra nixpkgs pins";
 
-  outputs = { self }: {
-    flakeModules.default = ./rad-flake.nix;
-    flakeModule = self.flakeModules.default;
+  inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+  inputs.flake-parts.url = "github:hercules-ci/flake-parts";
 
-    templates.default.path = ./templates/default;
-    templates.default.description = ''
-      Barebones flake-parts boilerplate, with the rad-flake module.
-    '';
+  outputs = { self, flake-parts, nixpkgs, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      flake = {
+        flakeModules.default = ./rad-flake.nix;
+        flakeModule = self.flakeModules.default;
 
-    templates.shell.path = ./templates/shell;
-    templates.shell.description = ''
-      Hop straight into a basic devShell.
-    '';
-  };
+        templates.default.path = ./templates/default;
+        templates.default.description = ''
+          Barebones flake-parts boilerplate, with the rad-flake module.
+        '';
+
+        templates.shell.path = ./templates/shell;
+        templates.shell.description = ''
+          Hop straight into a basic devShell.
+        '';
+      };
+
+      systems = nixpkgs.lib.systems.flakeExposed;
+      perSystem = { pkgs, ... }: { formatter = pkgs.nixfmt-tree; };
+    };
 }
