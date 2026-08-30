@@ -6,7 +6,7 @@
 }:
 let
   makePkgs = pkgsInput: system:
-    import pkgsInput ({ inherit system; } // config.pkgsPins.nixpkgsConfig);
+  import pkgsInput ({ inherit system; } // config.pkgsPins.nixpkgsConfig);
 
   pinNames =
   let
@@ -27,9 +27,9 @@ let
 
   mkPins = system:
   let
-    pkgsPins = lib.genAttrs' pinNames (pin: {
-      name = "pkgs-${pin}";
-      value = makePkgs inputs.${"nixpkgs-${pin}"} system;
+    pkgsPins = lib.genAttrs' pinNames (name: {
+      name = "pkgs-${name}";
+      value = makePkgs inputs.${"nixpkgs-${name}"} system;
     });
 
     # flake-utils handles nixpkgs -> pkgs, but if no plain nixpkgs input is present, we need to provide one of the pins
@@ -43,5 +43,5 @@ let
 in
 {
   config.flake.pkgsPins.pins = lib.genAttrs config.pkgsPins.systems mkPins;
-  config.perSystem = { system, ...}: { _module.args = mkPins system; };
+  config.perSystem = { system, ... }: { _module.args = mkPins system; };
 }
