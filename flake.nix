@@ -5,31 +5,37 @@
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
 
   outputs =
-    {
-      self,
-      flake-parts,
-      nixpkgs,
-      ...
-    }@inputs:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ ./rad-flake.nix ];
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      {
+        self,
+        lib,
+        options,
+        ...
+      }:
+      {
+        imports = [
+          inputs.flake-parts.flakeModules.modules
+          ./polypin.nix
+        ];
 
-      flake = {
-        flakeModules.default = ./rad-flake.nix;
-        flakeModule = self.flakeModules.default;
+        config.flake = {
+          flakeModules.default = ./polypin.nix;
+          flakeModule = self.flakeModules.default;
 
-        templates.default.path = ./templates/default;
-        templates.default.description = ''
-          Barebones flake-parts boilerplate, with the rad-flake module.
-        '';
+          templates.default.path = ./templates/default;
+          templates.default.description = ''
+            Barebones flake-parts boilerplate, with the polypin module
+          '';
 
-        templates.shell.path = ./templates/shell;
-        templates.shell.description = ''
-          Hop straight into a basic devShell.
-        '';
-      };
+          templates.shell.path = ./templates/shell;
+          templates.shell.description = ''
+            Hop straight into a basic devShell.
+          '';
+        };
 
-      systems = nixpkgs.lib.systems.flakeExposed;
-      perSystem = { pkgs, ... }: { formatter = pkgs.nixfmt-tree; };
-    };
+        config.systems = inputs.nixpkgs.lib.systems.flakeExposed;
+        config.perSystem = { pkgs, ... }: { formatter = pkgs.nixfmt-tree; };
+      }
+    );
 }
