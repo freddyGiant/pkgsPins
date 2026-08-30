@@ -33,13 +33,15 @@ inputs.flake-parts.lib.mkFlake { inherit inputs; } (
 );
 ```
 
-pkgsPins will set `config.flake.pkgsPins` as an output on *your* flake. You can thus access pins via `inputs.self.pkgsPins.${system}`.
+pkgsPins will set `config.flake.pkgsPins` as an output on *your* flake. You can thus access pins via `inputs.self.pkgsPins.${system}`. pkgsPins will also modify `_module.args` such that the pkgs pins will be provided as arguments to the function in `perSystem` alongside `pkgs`.
 
-Import the provided module to inject the pinned pkgs into flake-parts perSystem module arguments.
+Later, you may write something like
 
 ```nix
-imports = [
-inputs.pkgsPins
-...
-];
+nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+  specialArgs = { inherit inputs; } // inputs.self.pkgsPins."x86_64-linux";
+  # ...
+};
 ```
+
+Now your NixOS Configuration modules can take `pkgs-*` pinned inputs!
