@@ -43,26 +43,6 @@ let
     pkgsPins // arbitraryPkgs;
 in
 {
-  options.polypin = {
-    inputPrefix = lib.mkOption {
-      type = lib.types.str;
-      default = "nixpkgs-";
-      description = "To find and strip from input names";
-    };
-
-    outputPrefix = lib.mkOption {
-      type = lib.types.str;
-      default = "pkgs-";
-      description = "if you change this you're a weirdo";
-    };
-
-    nixpkgsConfig = lib.mkOption {
-      type = options.nixpkgs.config.type;
-      default = { };
-      description = "Extra arguments (e.g., excluding system) to pass to `import nixpkgs`.";
-    };
-  };
-
   # this will be the user's config.systems when they import this module
   config.flake.polypin.pins = lib.genAttrs config.systems mkPins;
   config.perSystem = { system, ...}: { _module.args = mkPins system; };
