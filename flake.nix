@@ -16,11 +16,11 @@
       {
         imports = [
           inputs.flake-parts.flakeModules.modules
-          ./polypin.nix
+          ./polypin
         ];
 
         config.flake = {
-          flakeModules.default = ./polypin.nix;
+          flakeModules.default = ./polypin;
           flakeModule = self.flakeModules.default;
 
           templates.default.path = ./templates/default;
