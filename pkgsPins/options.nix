@@ -1,4 +1,11 @@
-{ config, inputs, lib, options, ... }: {
+{
+  config,
+  inputs,
+  lib,
+  options,
+  ...
+}:
+{
   options.pkgsPins = {
     inputPrefix = lib.mkOption {
       type = lib.types.str;
