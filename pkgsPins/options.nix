@@ -26,10 +26,9 @@
     };
 
     nixpkgsConfig = lib.mkOption {
-      # type = inputs.nixpkgs.options.config.type;
-      type = lib.types.attrs;
+      type = lib.types.deferredModule;
       default = { };
-      description = "Extra arguments (e.g., excluding system) to pass to `import nixpkgs`";
+      description = "Extra arguments (e.g., allowUnfree, overlays, but probably not system) to pass to `import nixpkgs`";
     };
   };
 }
