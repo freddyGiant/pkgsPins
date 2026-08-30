@@ -1,5 +1,5 @@
 { config, inputs, lib, options, ... }: {
-  options.polypin = {
+  options.pkgs-pins = {
     inputPrefix = lib.mkOption {
       type = lib.types.str;
       default = "nixpkgs-";
@@ -20,7 +20,7 @@
 
     nixpkgsConfig = lib.mkOption {
       # type = inputs.nixpkgs.options.config.type;
-      type = 
+      type = lib.types.attrs;
       default = { };
       description = "Extra arguments (e.g., excluding system) to pass to `import nixpkgs`";
     };
