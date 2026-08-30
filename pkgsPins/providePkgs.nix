@@ -5,24 +5,24 @@
   ...
 }:
 let
-  makePkgs =
-    pkgsInput: system: import pkgsInput ({ inherit system; } // config.rad-flake.nixpkgsConfig);
+  makePkgs = pkgsInput: system:
+    import pkgsInput ({ inherit system; } // config.pkgsPins.nixpkgsConfig);
 
   pinNames =
-    let
-      inherit (builtins)
-        filter
-        substring
-        stringLength
-        attrNames
-        ;
+  let
+    inherit (builtins)
+      filter
+      substring
+      stringLength
+      attrNames
+      ;
 
-      prefixLength = stringLength config.polypin.inputPrefix;
-      withoutPrefix = s: substring prefixLength (stringLength s - prefixLength);
-    in
+    prefixLength = stringLength config.pkgsPins.inputPrefix;
+    withoutPrefix = s: substring prefixLength (stringLength s - prefixLength);
+  in
     inputs
     |> attrNames
-    |> filter (lib.strings.hasPrefix config.polypin.inputPrefix)
+    |> filter (lib.strings.hasPrefix config.pkgsPins.inputPrefix)
     |> map withoutPrefix;
 
   mkPins = system:
@@ -42,6 +42,6 @@ let
     pkgsPins // arbitraryPkgs;
 in
 {
-  config.flake.polypin.pins = lib.genAttrs config.pkgs-pins.systems mkPins;
+  config.flake.pkgsPins.pins = lib.genAttrs config.pkgsPins.systems mkPins;
   config.perSystem = { system, ...}: { _module.args = mkPins system; };
 }

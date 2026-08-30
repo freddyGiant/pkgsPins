@@ -1,5 +1,5 @@
 { config, inputs, lib, options, ... }: {
-  options.pkgs-pins = {
+  options.pkgsPins = {
     inputPrefix = lib.mkOption {
       type = lib.types.str;
       default = "nixpkgs-";

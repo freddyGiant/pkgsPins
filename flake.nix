@@ -16,16 +16,16 @@
       {
         imports = [
           inputs.flake-parts.flakeModules.modules
-          ./pkgs-pins
+          ./pkgsPins
         ];
 
         config.flake = {
-          flakeModules.default = ./pkgs-pins;
+          flakeModules.default = ./pkgsPins;
           flakeModule = self.flakeModules.default;
 
           templates.default.path = ./templates/default;
           templates.default.description = ''
-            Barebones flake-parts boilerplate, with the pkgs-pins module
+            Barebones flake-parts boilerplate, with the pkgsPins module
           '';
 
           templates.shell.path = ./templates/shell;
