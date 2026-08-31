@@ -1,7 +1,7 @@
 {
   description = "flake-parts module that deals with extra nixpkgs pins";
 
-  inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+  # inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
 
   outputs =
@@ -34,8 +34,8 @@
           '';
         };
 
-        config.systems = inputs.nixpkgs.lib.systems.flakeExposed;
-        config.perSystem = { pkgs, ... }: { formatter = pkgs.nixfmt-tree; };
+        # config.systems = inputs.nixpkgs.lib.systems.flakeExposed;
+        # config.perSystem = { pkgs, ... }: { formatter = pkgs.nixfmt-tree; };
       }
     );
 }
