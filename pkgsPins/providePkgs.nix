@@ -18,7 +18,7 @@ let
         ;
 
       prefixLength = stringLength config.pkgsPins.inputPrefix;
-      withoutPrefix = s: substring prefixLength (stringLength s - prefixLength);
+      withoutPrefix = s: substring prefixLength (stringLength s - prefixLength) s;
     in
     inputs
     |> attrNames
