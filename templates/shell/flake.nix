@@ -1,7 +1,7 @@
 {
   inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
-  inputs.pkgsPins.url = "github:freddyGiant/rad-flake";
+  inputs.pkgsPins.url = "github:freddyGiant/pkgsPins";
 
   outputs = inputs:
   inputs.flake-parts.lib.mkFlake { inherit inputs; } ({
