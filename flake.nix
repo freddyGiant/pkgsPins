@@ -1,3 +1,4 @@
+# TODO: pkgs-pins -> pkgs-pins
 {
   description = "flake-parts module that deals with extra nixpkgs pins";
 
@@ -16,16 +17,16 @@
       {
         imports = [
           inputs.flake-parts.flakeModules.modules
-          ./pkgsPins
+          ./pkgs-pins
         ];
 
         config.flake = {
-          flakeModules.default = ./pkgsPins;
+          flakeModules.default = ./pkgs-pins;
           flakeModule = self.flakeModules.default;
 
           templates.default.path = ./templates/default;
           templates.default.description = ''
-            Barebones flake-parts boilerplate, with the pkgsPins module
+            Barebones flake-parts boilerplate, with the pkgs-pins module
           '';
 
           templates.shell.path = ./templates/shell;

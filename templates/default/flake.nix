@@ -1,7 +1,7 @@
 {
   inputs.nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
   inputs.flake-parts.url = "github:hercules-ci/flake-parts";
-  inputs.pkgsPins.url = "github:freddyGiant/pkgsPins";
+  inputs.pkgs-pins.url = "github:freddyGiant/pkgs-pins";
 
   outputs = inputs:
   inputs.flake-parts.lib.mkFlake { inherit inputs; } ({
@@ -9,7 +9,7 @@
     ...
   }:
   {
-    imports = [ inputs.pkgsPins.flakeModules.default ];
+    imports = [ inputs.pkgs-pins.flakeModules.default ];
 
     systems = inputs.nixpkgs.lib.systems.flakeExposed;
     perSystem = { pkgs, ... }: {
