@@ -1,8 +1,8 @@
-# pkgsPins
+# pkgs-pins
 
 Flake-parts module providing patterned `pkgs` derivations for each pinned `nixpkgs`
 
-By default, for each `nixpkgs-*` input, pkgsPins supplies a corresponding `pkgs-*`.
+By default, for each `nixpkgs-*` input, pkgs-pins supplies a corresponding `pkgs-*`.
 
 <!-- appropriately suffixed -->
 <!-- -prefixed input. -->
@@ -18,14 +18,14 @@ inputs.nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
 inputs.nixpkgs-0343e34.url = "nixpkgs/0343e3415784b2cd9c68924294794f7dbee12ab3";
 
 inputs.flake-parts.url = "github:hercules-ci/flake-parts";
-inputs.pkgsPins = "github:freddyGiant/pkgsPins"; # pkgsPins
+inputs.pkgs-pins = "github:freddyGiant/pkgs-pins"; # pkgs-pins
 
 outputs = inputs:
 inputs.flake-parts.lib.mkFlake { inherit inputs; } (
   { inputs, ... }:
   {
     imports = [
-      inputs.pkgsPins.flakeModules.modules # import the provided flake module
+      inputs.pkgs-pins.flakeModules.modules # import the provided flake module
       # ...
     ];
     # ...
@@ -33,13 +33,13 @@ inputs.flake-parts.lib.mkFlake { inherit inputs; } (
 );
 ```
 
-pkgsPins will set `config.flake.pkgsPins` as an output on *your* flake. You can thus access pins via `inputs.self.pkgsPins.${system}`. pkgsPins will also modify `_module.args` such that the pkgs pins will be provided as arguments to the function in `perSystem` alongside `pkgs`.
+pkgs-pins will set `config.flake.pkgs-pins` as an output on *your* flake. You can thus access pins via `inputs.self.pkgs-pins.${system}`. pkgs-pins will also modify `_module.args` such that the pkgs pins will be provided as arguments to the function in `perSystem` alongside `pkgs`.
 
 Later, you may write something like
 
 ```nix
 nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
-  specialArgs = { inherit inputs; } // inputs.self.pkgsPins."x86_64-linux";
+  specialArgs = { inherit inputs; } // inputs.self.pkgs-pins."x86_64-linux";
   # ...
 };
 ```
